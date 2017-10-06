@@ -4,14 +4,46 @@ import { Link } from 'react-router';
 import queryString from 'query-string';
 import axios from 'axios';
 import QuoteNavigation from './QuoteNavigation';
+import Quotes from './Quotes';
 
 class QuotesDisplay extends React.Component {
   constructor() {
     super()
     this.state = {
       quote: {},
-      fireRedirect: false
+      fireRedirect: false,
+      modalOpen: false,
+      submitQuote: {},
+      inputQuote: '',
+      inputAuthor: ''
     }
+  }
+
+  handleChange = (event) => {
+  const name = event.target.name
+  const value = event.target.value
+  this.setState({
+      [name]: value
+    })
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    axios.post(`api/quotes`, {
+      text: this.state.inputQuote,
+      author: this.state.inputAuthor
+    })
+    .then( (res) => {
+      this.setState({
+        inputQuote: '',
+        inputAuthor: '',
+        modalOpen: false,
+        submitQuote: res.data
+      })
+    })
+    .then( () => {
+      this.props.history.push(`/?quote=${this.state.submitQuote.id}`)
+    })
   }
 
   fetchQuote(id) {
@@ -23,6 +55,12 @@ class QuotesDisplay extends React.Component {
         console.error(error)
         this.setState({ fireRedirect: true })
       })
+  }
+
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
+    })
   }
 
   setQuoteIdFromQueryString(qs) {
@@ -58,7 +96,11 @@ class QuotesDisplay extends React.Component {
             <Redirect to={'/'} />
           }
 
-          <QuoteNavigation direction='previous' otherQuoteId={previousQuoteId} />
+          {previousQuoteId != null ? <QuoteNavigation direction='previous' otherQuoteId={previousQuoteId} /> : null }
+
+          < Quotes quote={this.state.quote} />
+
+          {nextQuoteId != null ? <QuoteNavigation direction='next' otherQuoteId={nextQuoteId} /> : null}
 
           <div className='quote'>
             <div className='quote-open'>“</div>

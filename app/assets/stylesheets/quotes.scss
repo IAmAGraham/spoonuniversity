@@ -2,11 +2,33 @@ body {
   font-family:  sans-serif;
 }
 
+button {
+  border-radius: 5px;
+  height: 25px;
+  background-color: white;
+  margin-left: 5px;
+
+}
+
+.form {
+  padding-bottom: 50px;
+  font-size: 13px;
+}
+label{
+  padding-left: 5px;
+
+}
 .quote-container {
   display:flex;
   height: 90vh;
   justify-content: center;
   align-items: center;
+ }
+
+ .form-container{
+   display: flex;
+   justify-content: center;
+   align-items: center;
  }
 
 .quote-text {
@@ -61,6 +83,7 @@ body {
     transform: scale(1.1);
   }
 }
+
 
 #footer {
   position: absolute;

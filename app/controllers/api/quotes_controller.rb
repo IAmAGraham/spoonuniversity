@@ -1,4 +1,7 @@
 class Api::QuotesController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
+  
   def show
     @quote = Quote.find(params[:id])
   end
